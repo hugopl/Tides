@@ -1,0 +1,15 @@
+Source: tides
+Section: user/other
+Priority: optional
+Maintainer: Hugo Parente Lima <hugo.pl@gmail.com>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+Homepage: http://tides.github.com
+
+Package: tides
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: See information about tides in Brazil
+             Show information about tides provided by brazilian
+             navy for all brazilian shipyards.
+XSBC-Maemo-Display-Name: Tides
