@@ -40,12 +40,19 @@ PageStackWindow {
         }
     }
 
+    SelectionDialog {
+        id: locationChooser
+        titleText: qsTr("Location")
+        model: ListModel {}
+    }
+
     Menu {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
             MenuItem {
                 text: qsTr("Change location")
+                onClicked: locationChooser.open();
             }
             MenuItem {
                 text: qsTr("About")
@@ -56,5 +63,8 @@ PageStackWindow {
 
     Component.onCompleted: {
         theme.inverted = true
+        // Workaround for a bug in SelectionDialog
+        for(var l in locations)
+            locationChooser.model.append({name: locations[l]})
     }
 }

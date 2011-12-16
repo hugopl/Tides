@@ -6,13 +6,15 @@
 # Add dependency to symbian components
 # CONFIG += qtquickcomponents
 
-QT += declarative
+QT += declarative sql
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     tidesmodel.cpp
 
 OTHER_FILES += \
+    qml/main.qml \
+    qml/MainPage.qml \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
     qtc_packaging/debian_harmattan/copyright \

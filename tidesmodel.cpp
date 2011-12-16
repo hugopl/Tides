@@ -1,5 +1,10 @@
 #include "tidesmodel.h"
 #include <QDate>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QStringList>
+#include <QStringListModel>
 #include <QDebug>
 
 enum {
@@ -17,7 +22,10 @@ TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent)
     roleNames.insert(1, "tide");
     setRoleNames(roleNames);
 
-    qWarning() << QDate::currentDate();
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("tides.sqlite3");
+    if (!db.open())
+        qCritical() << "Failed to open database! " << db.lastError().text();
 }
 
 int TidesModel::rowCount(const QModelIndex& parent) const
@@ -30,4 +38,13 @@ QVariant TidesModel::data(const QModelIndex& index, int role) const
     if (role >= ROLE_COUNT)
         return QVariant();
     return QVariant();
+}
+
+QStringList TidesModel::locations() const
+{
+    QStringList result;
+    QSqlQuery q("SELECT name FROM locations ORDER BY name");
+    while (q.next())
+        result.append(q.value(0).toString());
+    return result;
 }

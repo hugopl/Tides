@@ -11,6 +11,7 @@ public:
 
     int rowCount(const QModelIndex& parent) const;
     QVariant data(const QModelIndex& index, int role) const;
+    QStringList locations() const;
 signals:
 
 public slots:
