@@ -35,7 +35,10 @@ desktopfile.files = Tides_harmattan.desktop
 desktopfile.path = /usr/share/applications
 icon.files = Tides80.png
 icon.path = /usr/share/icons/hicolor/80x80/apps
-INSTALLS += icon desktopfile
+db.files = tides.sqlite3
+db.path = /opt/Tides
+INSTALLS += icon desktopfile db
+
 contains(MEEGO_EDITION,harmattan) {
     target.path = /opt/Tides/bin
     INSTALLS += target

@@ -34,10 +34,13 @@ PageStackWindow {
                 anchors.bottomMargin: 10
             }
         }
-        buttons: Button {
-            text: qsTr("OK")
-            onClicked: aboutBox.accept()
-        }
+        buttons: ButtonRow {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Button {
+                        text: qsTr("OK")
+                        onClicked: aboutBox.accept()
+                    }
+                }
     }
 
     SelectionDialog {

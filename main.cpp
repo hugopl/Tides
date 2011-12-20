@@ -16,10 +16,6 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("TIDES_VERSION", "1.0.0");
     viewer.rootContext()->setContextProperty("tides", &model);
     viewer.setSource(QUrl("qrc:/main.qml"));
-#if defined(Q_WS_MAEMO_6)
     viewer.showFullScreen();
-#else
-    viewer.show();
-#endif
     return app.exec();
 }

@@ -3,12 +3,11 @@ import com.nokia.meego 1.0
 
 Page {
     tools: commonTools
-    orientationLock: PageOrientation.LockPortrait
     anchors.fill: parent
 
     Rectangle {
         id: viewHeader
-        color: "steelBlue"
+        color: "#7490BA"
         width: parent.width
         height: screen.currentOrientation == Screen.Landscape ? UiConstants.HeaderDefaultHeightLandscape : UiConstants.HeaderDefaultHeightPortrait
         Text {
@@ -16,7 +15,10 @@ Page {
             elide: Text.ElideRight
             color: "white"
             font.pixelSize: 30
-            anchors.centerIn: parent
+            anchors.fill: parent
+            anchors.margins: UiConstants.DefaultMargin
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
         }
     }
 

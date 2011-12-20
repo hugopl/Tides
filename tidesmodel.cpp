@@ -26,7 +26,7 @@ TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent)
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("tides.sqlite3");
     if (!db.open())
-        qCritical() << "Failed to open database! " << db.lastError().text();
+        qFatal("Failed to open database!");
 
     QSettings cfg;
     QString loc = cfg.value("location").toString();
@@ -68,6 +68,9 @@ QStringList TidesModel::locations() const
 
 void TidesModel::setCurrentLocation(const QString& location)
 {
+    if (location == m_currentLocation)
+        return;
+
     m_currentLocation = location;
     emit currentLocationChanged();
 
