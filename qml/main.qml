@@ -68,8 +68,13 @@ PageStackWindow {
     Component.onCompleted: {
         theme.inverted = true
         // Workaround for a bug in SelectionDialog
-        for(var l in locations)
+        var i = 0;
+        for(var l in locations) {
             locationChooser.model.append({name: locations[l]})
+            if (locations[l] == tides.currentLocation)
+                locationChooser.selectedIndex = i
+                ++i
+        }
 
         if (tides.currentLocation.length == 0)
             locationChooser.open();

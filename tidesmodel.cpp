@@ -24,9 +24,14 @@ TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent)
     setRoleNames(roleNames);
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("tides.sqlite3");
-    if (!db.open())
-        qFatal("Failed to open database!");
+    // hardcoded names ftw!
+    db.setDatabaseName("/opt/Tides/tides.sqlite3");
+    if (!db.open()) {
+        // Try to open the local db as fallback
+        db.setDatabaseName("tides.sqlite3");
+        if (!db.open())
+            qFatal("Failed to open database!");
+    }
 
     QSettings cfg;
     QString loc = cfg.value("location").toString();
