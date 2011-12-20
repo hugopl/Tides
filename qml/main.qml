@@ -44,6 +44,7 @@ PageStackWindow {
         id: locationChooser
         titleText: qsTr("Location")
         model: ListModel {}
+        onAccepted: tides.currentLocation = locationChooser.model.get(locationChooser.selectedIndex).name;
     }
 
     Menu {
@@ -66,5 +67,8 @@ PageStackWindow {
         // Workaround for a bug in SelectionDialog
         for(var l in locations)
             locationChooser.model.append({name: locations[l]})
+
+        if (tides.currentLocation.length == 0)
+            locationChooser.open();
     }
 }
