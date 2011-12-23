@@ -15,7 +15,7 @@ Page {
 
     Image {
         id: emptyBg
-        source: /*screen.currentOrientation ?*/ "image://theme/meegotouch-empty-application-background-black-portrait"
+        source: screen.currentOrientation === Screen.Landscape ? "image://theme/meegotouch-empty-application-background-black-landscape" : "image://theme/meegotouch-empty-application-background-black-portrait"
         anchors.fill: parent
         visible: tides.currentLocation.length === 0
 
@@ -35,7 +35,7 @@ Page {
         id: viewHeader
         color: "#7490BA"
         width: parent.width
-        height: screen.currentOrientation == Screen.Landscape ? UiConstants.HeaderDefaultHeightLandscape : UiConstants.HeaderDefaultHeightPortrait
+        height: screen.currentOrientation === Screen.Landscape ? UiConstants.HeaderDefaultHeightLandscape : UiConstants.HeaderDefaultHeightPortrait
         Text {
             text: tides.currentLocation ? tides.currentLocation : qsTr("Tides")
             elide: Text.ElideRight
@@ -117,6 +117,7 @@ Page {
             section.property: "date"
             section.delegate: sectionHeading
         }
+        ScrollDecorator { flickableItem: tidesView }
     }
 
     Component.onCompleted: {
