@@ -30,8 +30,9 @@ PageStackWindow {
                 anchors.centerIn: parent
                 font.pixelSize: 22
                 color: "white"
-                text: qsTr("<center style=\"padding-bottom: 10px;\"><img src=\":/icon.png\" width=\"64\" height=\"64\"><p><b>Tides v" + TIDES_VERSION + "</b><br>&copy; 2011 Hugo Parente Lima</p></center>")
+                text: qsTr("<center style=\"padding-bottom: 10px;\"><img src=\":/icon.png\" width=\"64\" height=\"64\"><p><b>Tides v" + TIDES_VERSION + "</b><br>&copy; 2011 Hugo Parente Lima<br><a href=\"https://github.com/hugopl/Tides\">https://github.com/hugopl/Tides</a></p></center>")
                 anchors.bottomMargin: 10
+                onLinkActivated: Qt.openUrlExternally(link)
             }
         }
         buttons: ButtonRow {
