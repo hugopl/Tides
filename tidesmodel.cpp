@@ -73,7 +73,7 @@ QStringList TidesModel::locations() const
 
 void TidesModel::setCurrentLocation(const QString& location)
 {
-    if (location == m_currentLocation)
+    if (location.isEmpty() || location == m_currentLocation)
         return;
 
     m_currentLocation = location;
@@ -100,7 +100,8 @@ void TidesModel::setCurrentLocation(const QString& location)
     ModelData item;
     while (query.next()) {
         int n = query.value(0).toInt();
-        item.date.sprintf("%02d/%02d/%02d", n % 100, (n / 100) % 100, n / 10000);
+        QDate d(n / 10000, (n / 100) % 100, n % 100);
+        item.date = d.toString("ddd, d MMM");
         n = query.value(1).toInt();
         item.time.sprintf("%02d:%02d", int(n / 100), int(n % 100));
         item.tide.setNum(query.value(2).toFloat(), 'f', 1);

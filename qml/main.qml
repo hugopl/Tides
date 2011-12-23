@@ -43,21 +43,10 @@ PageStackWindow {
                 }
     }
 
-    SelectionDialog {
-        id: locationChooser
-        titleText: qsTr("Location")
-        model: ListModel {}
-        onAccepted: tides.currentLocation = locationChooser.model.get(locationChooser.selectedIndex).name;
-    }
-
     Menu {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {
-                text: qsTr("Change location")
-                onClicked: locationChooser.open();
-            }
             MenuItem {
                 text: qsTr("About")
                 onClicked: aboutBox.open()
@@ -67,16 +56,5 @@ PageStackWindow {
 
     Component.onCompleted: {
         theme.inverted = true
-        // Workaround for a bug in SelectionDialog
-        var i = 0;
-        for(var l in locations) {
-            locationChooser.model.append({name: locations[l]})
-            if (locations[l] == tides.currentLocation)
-                locationChooser.selectedIndex = i
-                ++i
-        }
-
-        if (tides.currentLocation.length == 0)
-            locationChooser.open();
     }
 }

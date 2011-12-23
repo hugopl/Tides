@@ -5,6 +5,32 @@ Page {
     tools: commonTools
     anchors.fill: parent
 
+    SelectionDialog {
+        id: locationChooser
+        titleText: qsTr("Location")
+        model: ListModel {}
+        onAccepted: tides.currentLocation = locationChooser.model.get(locationChooser.selectedIndex).name;
+
+    }
+
+    Image {
+        id: emptyBg
+        source: /*screen.currentOrientation ?*/ "image://theme/meegotouch-empty-application-background-black-portrait"
+        anchors.fill: parent
+        visible: tides.currentLocation.length === 0
+
+        Label {
+            text: qsTr("Tap on application header to choose a location")
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#525152"
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 56
+        }
+    }
+
     Rectangle {
         id: viewHeader
         color: "#7490BA"
@@ -17,8 +43,19 @@ Page {
             font.pixelSize: 30
             anchors.fill: parent
             anchors.margins: UiConstants.DefaultMargin
+            anchors.rightMargin: locationBtn.width + UiConstants.DefaultMargin
             verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
+        }
+        Image {
+            id: locationBtn
+            source: "image://theme/icon-m-textinput-combobox-arrow"
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: UiConstants.DefaultMargin
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: locationChooser.open()
         }
     }
 
@@ -81,4 +118,16 @@ Page {
             section.delegate: sectionHeading
         }
     }
+
+    Component.onCompleted: {
+        // Workaround for a bug in SelectionDialog
+        var i = 0;
+        for(var l in locations) {
+            locationChooser.model.append({name: locations[l]})
+            if (locations[l] == tides.currentLocation)
+                locationChooser.selectedIndex = i
+                ++i
+        }
+    }
+
 }
