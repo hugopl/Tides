@@ -8,6 +8,7 @@
 #include <QSettings>
 #include <QDebug>
 
+#define DAYS_TO_SHOW 14
 enum {
     ROLE_DATE = 0,
     ROLE_TIME,
@@ -90,7 +91,7 @@ void TidesModel::setCurrentLocation(const QString& location)
 
     query.prepare("SELECT date, time, tide FROM tides WHERE locationId=? AND date BETWEEN ? AND ?");
     QString startDate = QDate::currentDate().toString("yyMMdd");
-    QString endDate = QDate::currentDate().addDays(5).toString("yyMMdd");
+    QString endDate = QDate::currentDate().addDays(DAYS_TO_SHOW).toString("yyMMdd");
     query.addBindValue(id);
     query.addBindValue(startDate);
     query.addBindValue(endDate);
