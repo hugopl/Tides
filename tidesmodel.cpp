@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QStringListModel>
 #include <QSettings>
+#include <QTimer>
 #include <QDebug>
 
 #define DAYS_TO_SHOW 14
@@ -16,7 +17,7 @@ enum {
     ROLE_COUNT
 };
 
-TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent)
+TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent), m_currentLocationId(-1)
 {
     QHash<int, QByteArray> roleNames;
     roleNames.insert(ROLE_DATE, "date");
@@ -38,6 +39,11 @@ TidesModel::TidesModel(QObject* parent) : QAbstractListModel(parent)
     QString loc = cfg.value("location").toString();
     if (!loc.isEmpty())
         setCurrentLocation(loc);
+
+    QTimer* timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(findCurrentLevel()));
+    // one call per 20mim
+    timer->start(1000 * 60 * 20);
 }
 
 int TidesModel::rowCount(const QModelIndex&) const
@@ -72,6 +78,56 @@ QStringList TidesModel::locations() const
     return result;
 }
 
+// Transform time number in format hhmm to number of minutes
+inline int fixTime(int time)
+{
+    return int(time / 100) * 60 + (time % 100);
+}
+
+void TidesModel::findCurrentLevel()
+{
+    if (m_currentLocationId == -1)
+        return;
+
+    int today = QDate::currentDate().toString("yyMMdd").toInt();
+    int now = QTime::currentTime().toString("hhmm").toInt();
+    QSqlQuery query;
+
+    query.prepare("SELECT date,time, tide FROM tides WHERE locationId = ? AND date <= ?  AND time <= ? ORDER BY date DESC,time DESC LIMIT 1");
+    query.addBindValue(m_currentLocationId);
+    query.addBindValue(today);
+    query.addBindValue(now);
+    query.exec();
+    query.next();
+    int startDate = query.value(0).toInt();
+    int startTime = query.value(1).toInt();
+    float startTide = query.value(2).toFloat();
+
+    query.prepare("SELECT date,time,tide FROM tides WHERE locationId = ? AND date >= ?  AND time >= ? ORDER BY date,time DESC LIMIT 1");
+    query.addBindValue(m_currentLocationId);
+    query.addBindValue(today);
+    query.addBindValue(now);
+    query.exec();
+    query.next();
+    int endDate = query.value(0).toInt();
+    int endTime = query.value(1).toInt();
+    float endTide = query.value(2).toFloat();
+
+    // Fix time if in diferrent dates
+    if (startDate != today)
+        endTime += 2400;
+    if (endDate != today)
+        endTime += 2400;
+
+    // Fix time
+    startTime = fixTime(startTime);
+    endTime = fixTime(endTime);
+    now = fixTime(now);
+    // Do the interpolation stuff, fuck the precision!
+    m_currentLevel = QString::number(startTide + (now - startTime) * ((endTide - startTide)/(endTime - startTime)), 'g', 3);
+    emit currentLevelChanged();
+}
+
 void TidesModel::setCurrentLocation(const QString& location)
 {
     if (location.isEmpty() || location == m_currentLocation)
@@ -87,27 +143,36 @@ void TidesModel::setCurrentLocation(const QString& location)
     query.exec();
 
     query.next();
-    int id = query.value(0).toInt();
+    m_currentLocationId = query.value(0).toInt();
 
     query.prepare("SELECT date, time, tide FROM tides WHERE locationId=? AND date BETWEEN ? AND ?");
-    QString startDate = QDate::currentDate().toString("yyMMdd");
-    QString endDate = QDate::currentDate().addDays(DAYS_TO_SHOW).toString("yyMMdd");
-    query.addBindValue(id);
+    const QDate currentDate = QDate::currentDate();
+    int startDate = currentDate.toString("yyMMdd").toInt();
+    QString endDate = currentDate.addDays(DAYS_TO_SHOW).toString("yyMMdd");
+    query.addBindValue(m_currentLocationId);
     query.addBindValue(startDate);
     query.addBindValue(endDate);
     query.exec();
 
     m_data.clear();
     ModelData item;
+
+
     while (query.next()) {
-        int n = query.value(0).toInt();
-        QDate d(2000 + n / 10000, (n / 100) % 100, n % 100);
+        int date = query.value(0).toInt();
+        QDate d(2000 + date / 10000, (date / 100) % 100, date % 100);
         item.date = d.toString("ddd, d MMM");
-        n = query.value(1).toInt();
-        item.time.sprintf("%02d:%02d", int(n / 100), int(n % 100));
-        item.tide.setNum(query.value(2).toFloat(), 'f', 1);
+
+        int time = query.value(1).toInt();
+        item.time.sprintf("%02d:%02d", int(time / 100), int(time % 100));
+
+        float tide = query.value(2).toFloat();
+        item.tide.setNum(tide, 'f', 1);
         m_data.append(item);
     }
+
+    findCurrentLevel();
+
     reset();
     QSettings cfg;
     cfg.setValue("location", m_currentLocation);

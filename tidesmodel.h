@@ -25,11 +25,20 @@ public:
                NOTIFY currentLocationChanged)
     QString getCurrentLocation() const { return m_currentLocation; }
     void setCurrentLocation(const QString& location);
+
+    Q_PROPERTY(QString currentLevel
+               READ getCurrentLevel
+               NOTIFY currentLevelChanged)
+    QString getCurrentLevel() const { return m_currentLevel; }
 signals:
     void currentLocationChanged();
-public slots:
+    void currentLevelChanged();
+private slots:
+    void findCurrentLevel();
 private:
     QString m_currentLocation;
+    int m_currentLocationId;
+    QString m_currentLevel;
     QList<ModelData> m_data;
 };
 

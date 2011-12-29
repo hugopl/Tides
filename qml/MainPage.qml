@@ -99,21 +99,34 @@ Page {
         }
     }
 
+    Column {
+        id: tideInfo
+        anchors.top: viewHeader.bottom
+        anchors.left: parent.left
+        anchors.right:  parent.right
+        anchors.margins: UiConstants.DefaultMargin
+        spacing: UiConstants.DefaultMargin
 
-        ListView {
-            id: tidesView
-            clip: true
-            anchors.margins: UiConstants.DefaultMargin
-            anchors.top: viewHeader.bottom
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right:  parent.right
-            model: tides
-            delegate: listDelegate
-            section.property: "date"
-            section.delegate: sectionHeading
+        Label {
+            color: "white"
+            text: qsTr("Current tide level: ~%1").arg(tides.currentLevel)
         }
-        ScrollDecorator { flickableItem: tidesView }
+    }
+
+    ListView {
+        id: tidesView
+        clip: true
+        anchors.margins: UiConstants.DefaultMargin
+        anchors.top: tideInfo.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right:  parent.right
+        model: tides
+        delegate: listDelegate
+        section.property: "date"
+        section.delegate: sectionHeading
+    }
+    ScrollDecorator { flickableItem: tidesView }
 
     Component.onCompleted: {
         // Workaround for a bug in SelectionDialog
