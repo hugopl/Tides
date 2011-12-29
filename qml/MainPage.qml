@@ -10,7 +10,6 @@ Page {
         titleText: qsTr("Location")
         model: ListModel {}
         onAccepted: tides.currentLocation = locationChooser.model.get(locationChooser.selectedIndex).name;
-
     }
 
     Image {
