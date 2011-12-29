@@ -99,25 +99,21 @@ Page {
         }
     }
 
-    Item {
-        anchors.margins: UiConstants.DefaultMargin
-        anchors.top: viewHeader.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right:  parent.right
 
         ListView {
             id: tidesView
             clip: true
-            anchors.fill: parent
-            width: parent.width
+            anchors.margins: UiConstants.DefaultMargin
+            anchors.top: viewHeader.bottom
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right:  parent.right
             model: tides
             delegate: listDelegate
             section.property: "date"
             section.delegate: sectionHeading
         }
         ScrollDecorator { flickableItem: tidesView }
-    }
 
     Component.onCompleted: {
         // Workaround for a bug in SelectionDialog
