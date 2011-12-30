@@ -103,7 +103,7 @@ void TidesModel::findCurrentLevel()
     int startTime = query.value(1).toInt();
     float startTide = query.value(2).toFloat();
 
-    query.prepare("SELECT date,time,tide FROM tides WHERE locationId = ? AND date >= ?  AND time >= ? ORDER BY date,time DESC LIMIT 1");
+    query.prepare("SELECT date,time,tide FROM tides WHERE locationId = ? AND date >= ?  AND time >= ? ORDER BY date,time LIMIT 1");
     query.addBindValue(m_currentLocationId);
     query.addBindValue(today);
     query.addBindValue(now);
