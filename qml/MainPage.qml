@@ -106,6 +106,7 @@ Page {
         anchors.right:  parent.right
         anchors.margins: UiConstants.DefaultMargin
         spacing: UiConstants.DefaultMargin
+        visible: tides.currentLocation.length !== 0
 
         Label {
             color: "white"
@@ -116,6 +117,7 @@ Page {
     ListView {
         id: tidesView
         clip: true
+        visible: tides.currentLocation.length !== 0
         anchors.margins: UiConstants.DefaultMargin
         anchors.top: tideInfo.bottom
         anchors.bottom: parent.bottom
