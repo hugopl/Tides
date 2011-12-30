@@ -1,3 +1,9 @@
+tides (1.0.1) unstable; urgency=low
+
+  * Show current tide level.
+
+ -- Hugo Parente Lima <hugo.pl@gmail.com>  Thu, 30 Dec 2011 18:52:00 -0300
+
 tides (1.0.0) unstable; urgency=low
 
   * Initial Release.

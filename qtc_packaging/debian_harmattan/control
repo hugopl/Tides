@@ -7,7 +7,6 @@ Standards-Version: 3.7.3
 Homepage: http://tides.github.com
 
 Package: tides
-Version: 1.0.0
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: See information about tides in Brazil
