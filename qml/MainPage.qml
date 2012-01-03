@@ -36,7 +36,7 @@ Page {
         width: parent.width
         height: screen.currentOrientation === Screen.Landscape ? UiConstants.HeaderDefaultHeightLandscape : UiConstants.HeaderDefaultHeightPortrait
         Text {
-            text: tides.currentLocation ? tides.currentLocation : qsTr("Tides")
+            text: tides.currentLocation ? tides.currentLocation : "Tides"
             elide: Text.ElideRight
             color: "white"
             font.pixelSize: 30
