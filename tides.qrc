@@ -3,5 +3,6 @@
         <file alias="icon.png">Tides64.png</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="MainPage.qml">qml/MainPage.qml</file>
+        <file alias="tides.pt.qm">i18n/tides.pt.qm</file>
     </qresource>
 </RCC>

@@ -1,2 +1,3 @@
 *.pro.user
 build
+i18n/*.qm

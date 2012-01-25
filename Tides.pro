@@ -28,6 +28,23 @@ HEADERS += \
 RESOURCES += \
     tides.qrc
 
+TRANSLATIONS += i18n/tides.pt.ts
+CODECFORTR = UTF-8
+
+isEmpty(QMAKE_LRELEASE) {
+    QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+
+isEmpty(TS_DIR):TS_DIR = i18n
+
+TSQM.name = lrelease ${QMAKE_FILE_IN}
+TSQM.input = TRANSLATIONS
+TSQM.output = $$TS_DIR/${QMAKE_FILE_BASE}.qm
+TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN}
+TSQM.CONFIG = no_link
+QMAKE_EXTRA_COMPILERS += TSQM
+PRE_TARGETDEPS += compiler_TSQM_make_all
+
 # Install procedures
 installPrefix = /opt/Tides
 

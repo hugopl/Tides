@@ -1,14 +1,22 @@
 #include <QApplication>
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
+#include <QLocale>
+#include <QTranslator>
 #include "tidesmodel.h"
 
+#include <QDebug>
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     app.setApplicationName("Tides");
     app.setOrganizationName("Tides");
     TidesModel model;
+
+    // install translator
+    QTranslator translator;
+    if (translator.load("tides." + QLocale::system().name(), ":/"))
+        app.installTranslator(&translator);
 
     QDeclarativeView viewer;
     viewer.setResizeMode(QDeclarativeView::SizeRootObjectToView);
