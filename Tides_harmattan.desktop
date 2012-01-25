@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Tides
-Exec=/usr/bin/single-instance /opt/Tides/bin/Tides
+Exec=/usr/bin/invoker --type=d -s /opt/Tides/bin/Tides
 Icon=/usr/share/icons/hicolor/80x80/apps/Tides80.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true
