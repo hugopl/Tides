@@ -1,22 +1,23 @@
+#include <MDeclarativeCache>
 #include <QApplication>
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
 #include <QLocale>
+#include <QScopedPointer>
 #include <QTranslator>
 #include "tidesmodel.h"
 
-#include <QDebug>
-int main(int argc, char *argv[])
+Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    app.setApplicationName("Tides");
-    app.setOrganizationName("Tides");
+    QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
+    app->setApplicationName("Tides");
+    app->setOrganizationName("Tides");
     TidesModel model;
 
     // install translator
     QTranslator translator;
     if (translator.load("tides." + QLocale::system().name(), ":/"))
-        app.installTranslator(&translator);
+        app->installTranslator(&translator);
 
     QDeclarativeView viewer;
     viewer.setResizeMode(QDeclarativeView::SizeRootObjectToView);
@@ -25,5 +26,5 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("tides", &model);
     viewer.setSource(QUrl("qrc:/main.qml"));
     viewer.showFullScreen();
-    return app.exec();
+    return app->exec();
 }
